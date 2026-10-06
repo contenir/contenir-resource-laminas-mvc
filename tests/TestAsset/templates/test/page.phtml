@@ -1,0 +1,8 @@
+<?php $this->resourceMeta($this->page); ?>
+<?php [$url, $target] = $this->resourceUrl($this->page->resourceId, null, '_self'); ?>
+<h1><?= $this->escapeHtml($this->page->title) ?></h1>
+<p class="summary"><?= $this->escapeHtml($this->resourceContent($this->page)) ?></p>
+<a class="self" href="<?= $this->escapeHtmlAttr((string) $url) ?>" target="<?= $this->escapeHtmlAttr((string) $target) ?>">self</a>
+<p class="canonical"><?= $this->escapeHtml($this->metadata?->url ?? '') ?></p>
+<p class="by-route"><?= $this->escapeHtml($this->byRoute?->title ?? '') ?></p>
+<p class="by-slug"><?= $this->escapeHtml($this->resource()->findBySlug('about')?->title ?? '') ?></p>
