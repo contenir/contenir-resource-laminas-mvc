@@ -25,6 +25,5 @@ contenir/contenir-resource 1.x. See [Coming from contenir-resource 1.x](docs/mig
 
 ### Notes
 
-- `composer.json` re-declares contenir/contenir-db-model 2.0.0-RC2 (commit a11bc4f) with `psr/simple-cache` widened
-  to `^1.0`, because laminas-cache 3 (required by contenir-workflow-laminas-mvc) allows only psr/simple-cache 1. The
-  package repository is removed once contenir-db-model 2.0.0-RC3 is tagged.
+- Resolves contenir/contenir-db-model v2.0.0-rc3 or later, the first release that accepts psr/simple-cache 1.x
+  alongside laminas-cache 3, which contenir-workflow-laminas-mvc requires.
