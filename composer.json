@@ -39,6 +39,9 @@
         "php-db/phpdb-sqlite": "0.3.x-dev",
         "phpunit/phpunit": "^11.5.42"
     },
+    "conflict": {
+        "laminas/laminas-stdlib": "<3.21"
+    },
     "autoload": {
         "psr-4": {
             "Contenir\\Resource\\Laminas\\Mvc\\": "src/"
