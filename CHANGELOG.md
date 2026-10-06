@@ -27,3 +27,4 @@ contenir/contenir-resource 1.x. See [Coming from contenir-resource 1.x](docs/mig
 
 - Resolves contenir/contenir-db-model v2.0.0-rc3 or later, the first release that accepts psr/simple-cache 1.x
   alongside laminas-cache 3, which contenir-workflow-laminas-mvc requires.
+- Conflicts with laminas/laminas-stdlib below 3.21, whose `SplPriorityQueue` raises deprecations on PHP 8.5.
