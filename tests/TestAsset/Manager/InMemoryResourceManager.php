@@ -13,8 +13,10 @@ use function array_key_first;
 
 /**
  * A resource manager over a fixed list of resources. Only the id lookups
- * and the three helper lookups are implemented; the others are not used by
- * the adapter. Every call is recorded.
+ * and the helper lookups are implemented; the others are not used by the
+ * adapter. Every call is recorded; findOneBy() answers with the first
+ * resource whatever its criteria, which the integration suite checks against
+ * a real database.
  */
 final class InMemoryResourceManager implements ResourceManagerInterface
 {
@@ -93,7 +95,9 @@ final class InMemoryResourceManager implements ResourceManagerInterface
     #[Override]
     public function findOneBy(array $criteria, array $orderBy = []): ?AbstractResourceEntity
     {
-        throw new LogicException('Not used by the adapter');
+        $this->calls[] = ['findOneBy', [$criteria, $orderBy]];
+
+        return $this->first();
     }
 
     #[Override]
