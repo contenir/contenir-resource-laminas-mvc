@@ -6,10 +6,27 @@ The module registers four helpers, with the names the 1.x helpers had. They are 
 
 | Name | Helper | Does |
 | --- | --- | --- |
-| `resource` / `Resource` | `ResourceHelper` | `resource($id)` gives the active resource (or `null`); `resource()` gives the helper, with `findBySlug()`, `findByWorkflow()`, `findActivePageByWorkflow()` (all active only) |
+| `resource` / `Resource` | `ResourceHelper` | `resource($id)` gives the active resource (or `null`), and `resource($ids)` the first active one of a list (see below); `resource()` gives the helper, with `findBySlug()`, `findByWorkflow()`, `findActivePageByWorkflow()` (all active only) |
 | `resourceMeta` / `ResourceMeta` | `ResourceMetaHelper` | `resourceMeta($resource)` or `resourceMeta($metadata)` sets `headTitle` (replacing it, when there is a title), the canonical `headLink` and the `headMeta` tags |
 | `resourceUrl` / `ResourceUrl` | `ResourceUrlHelper` | `[$url, $target] = resourceUrl($resource, $url, $target)` |
 | `resourceContent` / `ResourceContent` | `ResourceContentHelper` | `resourceContent($resourceOrText)`, a plain-text summary |
+
+## resource
+
+`resource($id)` takes an int or a string of digits (`'007'` is id 7) and gives the active resource with that id, or
+`null`. A blank string gives `null` without a query.
+
+`resource($ids)` takes any iterable of ids, as CMS sections store a linked resource from a multi-select, and gives the
+active resource with the lowest of those ids, or `null`, in one query: the resource 1.x's `resource_id IN (...)` lookup
+found. List order does not matter, blank entries are skipped, and an empty list gives `null` without a query.
+
+```php
+<?php $resource = $this->resource($this->section->resource) ?>
+```
+
+Anything else, as the id or as a list entry (a word such as a slug, `'12abc'`, `'-1'`, `'1.5'`, a float, a bool,
+`null` in a list, a nested list or an object), throws `Exception\InvalidResourceIdException`, an
+`InvalidArgumentException` that implements contenir-resource's `ExceptionInterface`. Use `findBySlug()` for slugs.
 
 ## resourceMeta
 
