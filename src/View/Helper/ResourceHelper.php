@@ -6,7 +6,14 @@ namespace Contenir\Resource\Laminas\Mvc\View\Helper;
 
 use Contenir\Db\Model\Exception\ExceptionInterface as DbModelException;
 use Contenir\Resource\Core\Entity\AbstractResourceEntity;
+use Contenir\Resource\Core\Entity\ResourceStatus;
 use Contenir\Resource\Core\ResourceManagerInterface;
+use Contenir\Resource\Laminas\Mvc\Exception\InvalidResourceIdException;
+
+use function is_int;
+use function is_iterable;
+use function is_string;
+use function preg_match;
 
 use function ctype_digit;
 use function is_array;
@@ -26,11 +33,19 @@ final readonly class ResourceHelper
     ) {}
 
     /**
-     * @phpstan-assert-if-true int|string $id
+     * The id in an argument or list entry: an int as it is, a string of
+     * digits as an int, or null for a blank string.
+     *
+     * @throws InvalidResourceIdException For anything else.
      */
-    private static function isId(mixed $id): bool
+    private static function idOf(mixed $value): ?int
     {
-        return is_int($id) ? $id > 0 : is_string($id) && ctype_digit($id) && '' !== ltrim($id, characters: '0');
+        return match (true) {
+            is_int($value) => $value,
+            '' === $value => null,
+            is_string($value) && 1 === preg_match('/^[0-9]+$/D', $value) => (int) $value,
+            default => throw InvalidResourceIdException::forValue($value),
+        };
     }
 
     /**
@@ -58,37 +73,46 @@ final readonly class ResourceHelper
     }
 
     /**
-     * Without an id, the helper itself; otherwise the active resource with
-     * that id, or null. A list of ids, as section link fields store them,
-     * yields the first id that resolves to an active resource.
+     * Without an id, the helper itself. With an id, the active resource with
+     * that id, or null. With a list of ids, as CMS sections store them, the
+     * active resource with the lowest of those ids, or null, as 1.x's
+     * "resource_id IN (...)" lookup found it. Blank strings find nothing and
+     * are skipped in a list; an empty list finds nothing without a query.
      *
-     * @param int|string|array<array-key, mixed>|null $resourceId
+     * @param int|string|iterable<mixed>|null $resourceId An id (an int or a string of digits), or a list of them.
      *
+     * @throws InvalidResourceIdException When an id is not an int, a blank string or a string of digits.
      * @throws DbModelException
      *
-     * @mago-expect analysis:mixed-assignment Link field values are untyped; each is checked before use.
+     * @mago-expect analysis:mixed-assignment List entries are untyped section data; idOf() checks each one.
      */
-    public function __invoke(int|string|array|null $resourceId = null): self|AbstractResourceEntity|null
+    public function __invoke(int|string|iterable|null $resourceId = null): self|AbstractResourceEntity|null
     {
         if (null === $resourceId) {
             return $this;
         }
 
-        if (! is_array($resourceId)) {
-            return $this->resources->findActive($resourceId);
+        if (! is_iterable($resourceId)) {
+            $id = self::idOf($resourceId);
+
+            return null === $id ? null : $this->resources->findActive($id);
         }
 
-        foreach ($resourceId as $id) {
-            if (! self::isId($id)) {
-                continue;
-            }
-
-            $resource = $this->resources->findActive($id);
-            if (null !== $resource) {
-                return $resource;
+        $ids = [];
+        foreach ($resourceId as $value) {
+            $id = self::idOf($value);
+            if (null !== $id) {
+                $ids[] = $id;
             }
         }
 
-        return null;
+        return (
+            [] === $ids
+                ? null
+                : $this->resources->findOneBy(
+                    ['resourceId' => $ids, 'status' => ResourceStatus::Active],
+                    ['resourceId' => 'ASC'],
+                )
+        );
     }
 }

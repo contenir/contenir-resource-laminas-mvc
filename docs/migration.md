@@ -44,7 +44,7 @@ the resource manager), and this package carries the laminas-mvc parts. contenir-
 | `$this->resource($id)` / `$this->resource($id, false)` | The same; also accepts the `resource_id` route parameter. Only active resources |
 | `ResourcePlugin::handleResult()` | Not applicable: internal to the plugin |
 | Looking up the routed resource in each controller | `Listener\ResourceListener` resolves it (404 when missing or unpublished); `$this->plugin('resource')->routed()` or `ResourceParam::require($this->getEvent())` |
-| View helper `resource($id)`, `->findBySlug()`, `->findByWorkflow()`, `->findActivePageByWorkflow()` | The `resource` helper, the same calls; `resource($id)` also takes a list of ids (as section link fields store them) and returns the first active resource |
+| View helper `resource($id)`, `->findBySlug()`, `->findByWorkflow()`, `->findActivePageByWorkflow()` | The `resource` helper, the same calls; `resource($id)` still takes a list of ids, as section templates pass them (see [view helpers](view-helpers.md#resource)) |
 | View helper `resourceMeta($resource)` (`HeadTitle`, `HeadMeta`, `HeadLink`, `ServerUrl`) | The `resourceMeta` helper, the same call, built on `PageMetadataBuilder`; it also takes a `PageMetadata` |
 | `ResourceMeta::getText()`, `getKeywords()`, `$banned_words`, `$min_word_length` | `MetaText::summarise()`, `MetaText::keywords()` (core) |
 | `RichContent` view helper on meta descriptions | Not applicable: site-specific; descriptions are reduced to plain text |
@@ -79,8 +79,15 @@ $page = $this->plugin('resource')->routed();
 ## Behaviour changes
 
 - Pages that are not active are not served, even when an old route cache still has their route: the listener
-  answers them with a 404. `$this->resource($id)` and the `resource` helper find active resources only (the 1.x
-  plugin found any status).
+  answers them with a 404. `$this->resource($id)` and the `resource` helper find active resources only. In 1.x
+  both found any status: the 1.x helper passed `['active' => 'active']` to `ResourceManager::findOne()`, which takes
+  only the id and ignored it.
+- `resource($ids)` with a list gives the active resource with the lowest id in the list. 1.x ran
+  `resource_id IN (...)` with no status filter and no `ORDER BY`, so it took the first row the database returned
+  (in practice the lowest id) even when that resource was inactive.
+- The `resource` helper throws `Exception\InvalidResourceIdException` for ids that are neither an int, a blank
+  string nor a string of digits (1.x sent them to the database, where MySQL compared them as numbers: `'about'`
+  found nothing and `'12abc'` found resource 12). Strings with leading zeros find the resource, as in 1.x.
 - `getMetaPublish()` is the `created` date (1.x returned `updated`), so `og:updated_time` changes for pages edited
   after creation.
 - `og:updated_time` is ISO 8601 (1.x `Y-m-d H:i:s`). The navigation and sitemap `lastmod` keeps workflow-laminas-mvc's
