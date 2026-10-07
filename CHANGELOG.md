@@ -23,6 +23,11 @@ contenir/contenir-resource 1.x. See [Coming from contenir-resource 1.x](docs/mig
 - Mago, PHPUnit unit and integration suites (a real laminas-mvc Application over in-memory SQLite), Infection
   (MSI 100%) and Codecov in CI.
 
+### Fixed
+
+- The `resource` view helper accepts a list of ids, as section link fields store them, as 1.x did; it returns the
+  first active resource instead of throwing a `TypeError`.
+
 ### Notes
 
 - Resolves contenir/contenir-db-model v2.0.0-rc3 or later, the first release that accepts psr/simple-cache 1.x

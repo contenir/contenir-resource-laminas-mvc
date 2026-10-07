@@ -44,7 +44,7 @@ the resource manager), and this package carries the laminas-mvc parts. contenir-
 | `$this->resource($id)` / `$this->resource($id, false)` | The same; also accepts the `resource_id` route parameter. Only active resources |
 | `ResourcePlugin::handleResult()` | Not applicable: internal to the plugin |
 | Looking up the routed resource in each controller | `Listener\ResourceListener` resolves it (404 when missing or unpublished); `$this->plugin('resource')->routed()` or `ResourceParam::require($this->getEvent())` |
-| View helper `resource($id)`, `->findBySlug()`, `->findByWorkflow()`, `->findActivePageByWorkflow()` | The `resource` helper, the same calls |
+| View helper `resource($id)`, `->findBySlug()`, `->findByWorkflow()`, `->findActivePageByWorkflow()` | The `resource` helper, the same calls; `resource($id)` also takes a list of ids (as section link fields store them) and returns the first active resource |
 | View helper `resourceMeta($resource)` (`HeadTitle`, `HeadMeta`, `HeadLink`, `ServerUrl`) | The `resourceMeta` helper, the same call, built on `PageMetadataBuilder`; it also takes a `PageMetadata` |
 | `ResourceMeta::getText()`, `getKeywords()`, `$banned_words`, `$min_word_length` | `MetaText::summarise()`, `MetaText::keywords()` (core) |
 | `RichContent` view helper on meta descriptions | Not applicable: site-specific; descriptions are reduced to plain text |
