@@ -18,7 +18,7 @@
         "source": "https://github.com/contenir/contenir-resource-laminas-mvc"
     },
     "require": {
-        "contenir/contenir-db-model": "dev-feat/entity-values-from-row as 2.0.0-rc5",
+        "contenir/contenir-db-model": "dev-main as 2.0.0-rc5",
         "contenir/contenir-metadata": "^2.0",
         "contenir/contenir-resource": "dev-feat/previews as 2.0.0-rc2",
         "contenir/contenir-workflow-laminas-mvc": "^2.1",
