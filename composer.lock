@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbb8ae013efea2c0b17775417439002d",
+    "content-hash": "824d7aedc8cf32cd939a37d8c07e2117",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -172,12 +172,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-resource.git",
-                "reference": "948e104c6f14f89673f4e3031f1a58cd5fa4e47e"
+                "reference": "bbf974fe69387b0b3872414800320e62f29f3c87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-resource/zipball/948e104c6f14f89673f4e3031f1a58cd5fa4e47e",
-                "reference": "948e104c6f14f89673f4e3031f1a58cd5fa4e47e",
+                "url": "https://api.github.com/repos/contenir/contenir-resource/zipball/bbf974fe69387b0b3872414800320e62f29f3c87",
+                "reference": "bbf974fe69387b0b3872414800320e62f29f3c87",
                 "shasum": ""
             },
             "require": {
@@ -187,7 +187,7 @@
                 "psr/container": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "contenir/contenir-preview": "dev-feat/container as 0.1.x-dev",
+                "contenir/contenir-preview": "0.1.x-dev",
                 "contenir/contenir-qa-tools": "0.1.x-dev",
                 "infection/infection": "^0.34.1",
                 "laminas/laminas-servicemanager": "^3.22 || ^4.0",
@@ -229,7 +229,7 @@
                 "issues": "https://github.com/contenir/contenir-resource/issues",
                 "source": "https://github.com/contenir/contenir-resource"
             },
-            "time": "2026-10-18T00:25:29+00:00"
+            "time": "2026-10-18T01:32:30+00:00"
         },
         {
             "name": "contenir/contenir-workflow-laminas-mvc",
@@ -2282,16 +2282,16 @@
         },
         {
             "name": "contenir/contenir-preview",
-            "version": "dev-feat/container",
+            "version": "0.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-preview.git",
-                "reference": "3a4cc5193cd59c1c1dbca28703c73659cc9a51a1"
+                "reference": "6d11419093dc26c12c813d2115772c8340163686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-preview/zipball/3a4cc5193cd59c1c1dbca28703c73659cc9a51a1",
-                "reference": "3a4cc5193cd59c1c1dbca28703c73659cc9a51a1",
+                "url": "https://api.github.com/repos/contenir/contenir-preview/zipball/6d11419093dc26c12c813d2115772c8340163686",
+                "reference": "6d11419093dc26c12c813d2115772c8340163686",
                 "shasum": ""
             },
             "require": {
@@ -2305,6 +2305,7 @@
                 "infection/infection": "^0.35.6",
                 "phpunit/phpunit": "^11.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2323,9 +2324,9 @@
             ],
             "support": {
                 "issues": "https://github.com/contenir/contenir-preview/issues",
-                "source": "https://github.com/contenir/contenir-preview/tree/feat/container"
+                "source": "https://github.com/contenir/contenir-preview/tree/0.1.x"
             },
-            "time": "2026-10-18T00:22:59+00:00"
+            "time": "2026-10-18T01:29:59+00:00"
         },
         {
             "name": "contenir/contenir-preview-laminas-mvc",
@@ -2333,16 +2334,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-preview-laminas-mvc.git",
-                "reference": "1a3c27c015015735465713737531fd2e258e080c"
+                "reference": "18d8ef6e65a6e62e260ba098b0a0a6d26f040369"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-preview-laminas-mvc/zipball/1a3c27c015015735465713737531fd2e258e080c",
-                "reference": "1a3c27c015015735465713737531fd2e258e080c",
+                "url": "https://api.github.com/repos/contenir/contenir-preview-laminas-mvc/zipball/18d8ef6e65a6e62e260ba098b0a0a6d26f040369",
+                "reference": "18d8ef6e65a6e62e260ba098b0a0a6d26f040369",
                 "shasum": ""
             },
             "require": {
-                "contenir/contenir-preview": "dev-feat/container as 0.1.x-dev",
+                "contenir/contenir-preview": "0.1.x-dev",
                 "laminas/laminas-eventmanager": "^3.13",
                 "laminas/laminas-http": "^2.19",
                 "laminas/laminas-mvc": "^3.8",
@@ -2388,7 +2389,7 @@
                 "issues": "https://github.com/contenir/contenir-preview-laminas-mvc/issues",
                 "source": "https://github.com/contenir/contenir-preview-laminas-mvc/tree/refactor/core-container"
             },
-            "time": "2026-10-18T00:24:15+00:00"
+            "time": "2026-10-18T01:31:03+00:00"
         },
         {
             "name": "contenir/contenir-qa-tools",
@@ -6354,12 +6355,6 @@
             "alias_normalized": "2.0.0.0-RC5"
         },
         {
-            "package": "contenir/contenir-preview",
-            "version": "dev-feat/container",
-            "alias": "0.1.x-dev",
-            "alias_normalized": "0.1.9999999.9999999-dev"
-        },
-        {
             "package": "contenir/contenir-preview-laminas-mvc",
             "version": "dev-refactor/core-container",
             "alias": "0.1.x-dev",
@@ -6376,7 +6371,6 @@
     "stability-flags": {
         "contenir/contenir-db-model": 20,
         "contenir/contenir-resource": 20,
-        "contenir/contenir-preview": 20,
         "contenir/contenir-preview-laminas-mvc": 20,
         "contenir/contenir-qa-tools": 20,
         "php-db/phpdb-sqlite": 20
