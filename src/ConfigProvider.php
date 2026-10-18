@@ -11,9 +11,12 @@ use Contenir\Resource\Laminas\Mvc\Container\ResourcePluginFactory;
 use Contenir\Resource\Laminas\Mvc\Container\ResourceTreeAdapterFactory;
 use Contenir\Resource\Laminas\Mvc\Container\ResourceUrlGeneratorFactory;
 use Contenir\Resource\Laminas\Mvc\Container\ViewHelperFactory;
+use Contenir\Resource\Laminas\Mvc\Container\WorkflowArticleResolverFactory;
+use Contenir\Resource\Laminas\Mvc\Container\WorkflowPageResolverFactory;
 use Contenir\Resource\Laminas\Mvc\Content\PartialSectionRenderer;
 use Contenir\Resource\Laminas\Mvc\Controller\Plugin\ResourcePlugin;
 use Contenir\Resource\Laminas\Mvc\Listener\ResourceListener;
+use Contenir\Resource\Laminas\Mvc\Preview\WorkflowPageResolver;
 use Contenir\Resource\Laminas\Mvc\Url\ResourceUrlGenerator;
 use Contenir\Resource\Laminas\Mvc\View\Helper\ResourceContentHelper;
 use Contenir\Resource\Laminas\Mvc\View\Helper\ResourceHelper;
@@ -30,6 +33,11 @@ use Contenir\Resource\Laminas\Mvc\Workflow\ResourceTreeAdapter;
  * generator, section renderer and workflow adapter. Controller plugin and
  * view helper names are those of contenir-resource 1.x.
  *
+ * CMS previews: when the application also loads contenir-preview-laminas-mvc, contenir-resource
+ * wraps the resource manager so a previewed resource carries the editor's unsaved values, and
+ * WorkflowPageResolver and WorkflowArticleResolver (named per listing workflow) resolve the
+ * sections that edit resources.
+ *
  * The only "contenir_resource" default is "section_renderer", so that
  * resourceContent renders section content through a partial as 1.x did.
  * Routing is switched on by the application's own "workflow_manager" config.
@@ -37,7 +45,9 @@ use Contenir\Resource\Laminas\Mvc\Workflow\ResourceTreeAdapter;
  * @psalm-type ServiceConfig = array{
  *     aliases: array<class-string, class-string>,
  *     invokables: array<class-string, class-string>,
- *     factories: array<class-string, class-string>
+ *     factories: array<class-string, class-string>,
+ *     delegators: array<class-string, list<class-string>>,
+ *     abstract_factories: list<class-string>
  * }
  * @psalm-type PluginConfig = array{aliases: array<string, class-string>, factories: array<class-string, class-string>}
  *
@@ -71,15 +81,18 @@ final class ConfigProvider
         $core = (new CoreConfigProvider())->getDependencies();
 
         return [
-            'aliases'    => $core['aliases'],
-            'invokables' => $core['invokables'],
-            'factories'  => [
+            'aliases'            => $core['aliases'],
+            'invokables'         => $core['invokables'],
+            'factories'          => [
                 ...$core['factories'],
                 PartialSectionRenderer::class => PartialSectionRendererFactory::class,
                 ResourceListener::class       => ResourceListenerFactory::class,
                 ResourceTreeAdapter::class    => ResourceTreeAdapterFactory::class,
                 ResourceUrlGenerator::class   => ResourceUrlGeneratorFactory::class,
+                WorkflowPageResolver::class   => WorkflowPageResolverFactory::class,
             ],
+            'delegators'         => $core['delegators'],
+            'abstract_factories' => [WorkflowArticleResolverFactory::class],
         ];
     }
 

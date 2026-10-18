@@ -6,6 +6,7 @@ namespace Contenir\Resource\Laminas\Mvc\Tests\Trait;
 
 use Contenir\Mvc\Workflow\Strategy\ResourceStrategyInterface;
 use Contenir\Mvc\Workflow\Workflow\WorkflowFactory;
+use Contenir\Resource\Laminas\Mvc\Tests\TestAsset\Controller\ArticleController;
 use Contenir\Resource\Laminas\Mvc\Tests\TestAsset\Controller\PageController;
 use Contenir\Resource\Laminas\Mvc\Tests\TestAsset\Workflow\PageControllerWorkflow;
 use Contenir\Resource\Laminas\Mvc\Workflow\ResourceTreeAdapter;
@@ -17,6 +18,7 @@ use Laminas\Mvc\SendResponseListener;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use PhpDb\Adapter\AdapterInterface;
 
+use function array_replace_recursive;
 use function dirname;
 
 /**
@@ -32,6 +34,8 @@ trait MvcApplicationTrait
      * @param array<string, mixed> $resourceConfig
      * @param array<string, mixed> $routes     Extra router routes.
      * @param StorageInterface|null $routeCache The strategy's route cache, shared between applications.
+     * @param list<string>         $modules    Modules loaded after this package's.
+     * @param array<string, mixed> $config     Configuration laid over the rest.
      *
      * @mago-expect lint:no-literal-namespace-string Module names are namespaces, not classes.
      */
@@ -39,6 +43,8 @@ trait MvcApplicationTrait
         array $resourceConfig = [],
         array $routes = [],
         ?StorageInterface $routeCache = null,
+        array $modules = [],
+        array $config = [],
     ): Application {
         $view = dirname(__DIR__) . '/TestAsset/templates';
 
@@ -48,16 +54,20 @@ trait MvcApplicationTrait
                 'Contenir\Db\Model',
                 'Contenir\Mvc\Workflow',
                 'Contenir\Resource\Laminas\Mvc',
+                ...$modules,
             ],
             'module_listener_options' => [
                 'use_laminas_loader'       => false,
                 'config_cache_enabled'     => false,
                 'module_map_cache_enabled' => false,
-                'extra_config'             => [
+                'extra_config'             => array_replace_recursive([
                     'contenir_resource' => $resourceConfig,
                     'router'            => ['routes' => $routes],
                     'service_manager'   => ['services' => [AdapterInterface::class => $this->adapter]],
-                    'controllers'       => ['factories' => [PageController::class => InvokableFactory::class]],
+                    'controllers'       => ['factories' => [
+                        PageController::class    => InvokableFactory::class,
+                        ArticleController::class => InvokableFactory::class,
+                    ]],
                     'workflow_manager'  => [
                         'aliases'   => ['page' => PageControllerWorkflow::class],
                         'factories' => [PageControllerWorkflow::class => WorkflowFactory::class],
@@ -78,10 +88,11 @@ trait MvcApplicationTrait
                             'error/404'                      => "{$view}/error/404.phtml",
                             'error/index'                    => "{$view}/error/index.phtml",
                             'test/page'                      => "{$view}/test/page.phtml",
+                            'test/article'                   => "{$view}/test/article.phtml",
                             'application/component/_section' => "{$view}/application/component/_section.phtml",
                         ],
                     ],
-                ],
+                ], $config),
             ],
         ]);
 

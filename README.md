@@ -148,6 +148,7 @@ Set `$this->doctype('HTML5')` (or `view_manager.doctype`) so `headMeta` accepts 
 | `Url\ResourceUrlGenerator` | Resource links through the router, editor-entered links through `ExternalUrl` |
 | `Content\PartialSectionRenderer` | Renders section content with a view partial, for `ResourceSummary` |
 | `View\Helper\ResourceHelper`, `ResourceMetaHelper`, `ResourceUrlHelper`, `ResourceContentHelper` | The view helpers |
+| `Preview\WorkflowPageResolver`, `WorkflowArticleResolver` | Which page shows a previewed page or article-like resource |
 | `Container\*Factory` | Container wiring |
 
 Every concrete class is `final`. The docs cover each area:
@@ -156,6 +157,7 @@ Every concrete class is `final`. The docs cover each area:
 - [The route listener and the controller plugin](docs/controllers.md)
 - [View helpers](docs/view-helpers.md)
 - [Configuration](docs/configuration.md)
+- [CMS previews](docs/previews.md)
 - [Coming from contenir-resource 1.x](docs/migration.md)
 
 ## Security

@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- CMS previews of resources, with contenir-preview-laminas-mvc loaded: `Preview\WorkflowPageResolver` and
+  `Preview\WorkflowArticleResolver` resolve the CMS sections that edit pages and article-like resources, and the
+  module registers contenir-resource's preview of the resource manager, so the site finds the previewed resource with
+  the editor's unsaved values, drafts and resources not saved yet included. See [CMS previews](docs/previews.md).
+
 ## [2.0.0-RC2] - 2026-10-07
 
 ### Fixed
