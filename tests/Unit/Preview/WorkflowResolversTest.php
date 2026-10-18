@@ -79,10 +79,11 @@ final class WorkflowResolversTest extends TestCase
     #[Test]
     public function anArticleWithoutAListingPageIsNotPreviewed(): void
     {
+        $resolver = new WorkflowArticleResolver($this->workflows(), new ListResourceManager(), 'news');
+
         $this->assertRefused(
             'The site has no page listing records like this one.',
-            fn() => (new WorkflowArticleResolver($this->workflows(), new ListResourceManager(), 'news'))
-                ->resolve(PreviewRecords::saved(201, ['slug' => 'late-checkout'])),
+            static fn() => $resolver->resolve(PreviewRecords::saved(201, ['slug' => 'late-checkout'])),
         );
     }
 

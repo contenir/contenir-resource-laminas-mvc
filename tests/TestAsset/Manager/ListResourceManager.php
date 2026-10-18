@@ -48,11 +48,10 @@ final class ListResourceManager implements ResourceManagerInterface
     public function findActive(int|string $resourceId): ?AbstractResourceEntity
     {
         $this->calls[] = 'findActive';
+        $id            = (string) $resourceId;
 
         return $this->first(
-            static fn(AbstractResourceEntity $r): bool => (
-                (string) $r->resourceId === (string) $resourceId && $r->isActive()
-            ),
+            static fn(AbstractResourceEntity $r): bool => $r->isActive() && (string) $r->resourceId === $id,
         );
     }
 
