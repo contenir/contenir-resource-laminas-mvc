@@ -14,9 +14,12 @@ use Contenir\Resource\Laminas\Mvc\Container\ResourcePluginFactory;
 use Contenir\Resource\Laminas\Mvc\Container\ResourceTreeAdapterFactory;
 use Contenir\Resource\Laminas\Mvc\Container\ResourceUrlGeneratorFactory;
 use Contenir\Resource\Laminas\Mvc\Container\ViewHelperFactory;
+use Contenir\Resource\Laminas\Mvc\Container\WorkflowArticleResolverFactory;
+use Contenir\Resource\Laminas\Mvc\Container\WorkflowPageResolverFactory;
 use Contenir\Resource\Laminas\Mvc\Content\PartialSectionRenderer;
 use Contenir\Resource\Laminas\Mvc\Controller\Plugin\ResourcePlugin;
 use Contenir\Resource\Laminas\Mvc\Listener\ResourceListener;
+use Contenir\Resource\Laminas\Mvc\Preview\WorkflowPageResolver;
 use Contenir\Resource\Laminas\Mvc\Url\ResourceUrlGenerator;
 use Contenir\Resource\Laminas\Mvc\View\Helper\ResourceContentHelper;
 use Contenir\Resource\Laminas\Mvc\View\Helper\ResourceHelper;
@@ -31,21 +34,24 @@ use PHPUnit\Framework\TestCase;
 final class ConfigProviderTest extends TestCase
 {
     #[Test]
-    public function itAddsItsServicesToTheCoreServices(): void
+    public function itAddsItsServicesAndPreviewWiringToTheCoreServices(): void
     {
         $core = (new CoreConfigProvider())->getDependencies();
 
         static::assertSame(
             [
-                'aliases'    => $core['aliases'],
-                'invokables' => $core['invokables'],
-                'factories'  => [
+                'aliases'            => $core['aliases'],
+                'invokables'         => $core['invokables'],
+                'factories'          => [
                     ...$core['factories'],
                     PartialSectionRenderer::class => PartialSectionRendererFactory::class,
                     ResourceListener::class       => ResourceListenerFactory::class,
                     ResourceTreeAdapter::class    => ResourceTreeAdapterFactory::class,
                     ResourceUrlGenerator::class   => ResourceUrlGeneratorFactory::class,
+                    WorkflowPageResolver::class   => WorkflowPageResolverFactory::class,
                 ],
+                'delegators'         => $core['delegators'],
+                'abstract_factories' => [WorkflowArticleResolverFactory::class],
             ],
             (new ConfigProvider())->getDependencies(),
         );
